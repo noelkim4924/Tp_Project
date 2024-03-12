@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class ItemBox : MonoBehaviour
 {
+    public bool isOveraped = false;
     private Renderer myRenderer;
     
     public Color touchColor;
@@ -25,6 +26,7 @@ public class ItemBox : MonoBehaviour
         {
             if(other.tag == "EndPoint")
             {
+                isOveraped = true;
                 myRenderer.material.color = touchColor;
             }
            Debug.Log("EndPoint arrived!");
@@ -34,6 +36,7 @@ public class ItemBox : MonoBehaviour
     {
         if(other.tag == "EndPoint")
         {
+            isOveraped = false;
             myRenderer.material.color = originalColor;
         }
     }
@@ -41,6 +44,7 @@ public class ItemBox : MonoBehaviour
     {
         if(other.tag == "EndPoint")
         {
+            isOveraped = true;
             myRenderer.material.color = touchColor;
         }
     }
