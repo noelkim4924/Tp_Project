@@ -2,48 +2,54 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-// This class is responsible for controlling the player's movement.
+/// <summary>
+/// Noel kim
+/// A01259986
+/// Controls the player's movement within the game, utilizing Unity's physics system for movement.
+/// </summary>
 public class Player : MonoBehaviour
 {
-    // Reference to the GameManager to check the game state.
+    /// <summary>
+    /// Reference to the GameManager to check if the game is over.
+    /// </summary>
     public GameManager gameManager;
 
-    // Movement speed of the player.
+    /// <summary>
+    /// The speed at which the player moves.
+    /// </summary>
     public float speed = 10f;
 
-    // The Rigidbody component attached to the player for physics-based movement.
-    private Rigidbody playerRigidbody; 
+    /// <summary>
+    /// The Rigidbody component attached to the player for physics-based movement.
+    /// </summary>
+    private Rigidbody playerRigidbody;
 
-    // Start is called before the first frame update.
+    /// <summary>
+    /// Initializes the player's movement system by retrieving the Rigidbody component.
+    /// </summary>
     void Start()
     {
-        // Get the Rigidbody component from the current GameObject.
         playerRigidbody = GetComponent<Rigidbody>();
     }
 
-    // Update is called once per frame.
+    /// <summary>
+    /// Updates the player's position each frame based on user input, provided the game is not over.
+    /// </summary>
     void Update()
     {
-        // If the game is over, disable player movement.
-        if(gameManager.isGameOver == true)
+        if (gameManager.isGameOver == true)
         {
             return;
         }
 
-        // Get user input for horizontal and vertical movement.
-        // "Horizontal" and "Vertical" are built-in Unity inputs configured in the Input Manager.
-        // They represent the arrow keys (or WASD keys) and return a value between -1 and 1.
         float inputX = Input.GetAxis("Horizontal");
         float inputZ = Input.GetAxis("Vertical");
 
-        // Keep the player's current vertical velocity to maintain gravity's effect.
         float fallSpeed = playerRigidbody.velocity.y;
 
-        // Create a new velocity vector based on input, speed, and maintaining current fall speed.
         Vector3 velocity = new Vector3(inputX, 0, inputZ) * speed;
-        velocity.y = fallSpeed; // Apply the original fall speed to the y-axis velocity.
+        velocity.y = fallSpeed;
 
-        // Assign the new velocity to the Rigidbody to move the player.
         playerRigidbody.velocity = velocity;
     }
 }

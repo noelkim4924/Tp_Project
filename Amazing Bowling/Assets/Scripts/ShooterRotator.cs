@@ -2,81 +2,110 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-// The ShooterRotator class is responsible for controlling the orientation of the ball shooter.
+/// <summary>
+/// NOEL KIM
+/// A01259986
+/// Controls the orientation of the ball shooter, allowing it to rotate horizontally and vertically 
+/// based on user input before allowing a ball to be shot.
+/// </summary>
 public class ShooterRotator : MonoBehaviour
 {
-    // Enumeration defining the potential states of rotation.
+    /// <summary>
+    /// Defines the possible rotation states of the ball shooter.
+    /// </summary>
     private enum RotateState
     {
-        Idle, // Not rotating.
-        Vertical, // Rotating vertically.
-        Horizontal, // Rotating horizontally.
-        Ready // Positioned and ready to fire.
+        /// <summary>
+        /// The shooter is not rotating.
+        /// </summary>
+        Idle,
+
+        /// <summary>
+        /// The shooter is rotating vertically.
+        /// </summary>
+        Vertical,
+
+        /// <summary>
+        /// The shooter is rotating horizontally.
+        /// </summary>
+        Horizontal,
+
+        /// <summary>
+        /// The shooter is positioned and ready to fire.
+        /// </summary>
+        Ready
     }
 
-    // Current state of the shooter, starting as Idle.
+    /// <summary>
+    /// The current rotation state of the shooter, initialized to Idle.
+    /// </summary>
     private RotateState state = RotateState.Idle;
 
-    // Rotation speed for both vertical and horizontal movements, adjustable via the Unity Inspector.
+    /// <summary>
+    /// The rotation speed for vertical movements, adjustable via the Unity Inspector.
+    /// </summary>
     public float verticalRotateSpeed = 360f;
+
+    /// <summary>
+    /// The rotation speed for horizontal movements, adjustable via the Unity Inspector.
+    /// </summary>
     public float horizontalRotateSpeed = 360f;
 
-    // Reference to the BallShooter script, which controls the shooting mechanism.
+    /// <summary>
+    /// Reference to the BallShooter script, which controls the shooting mechanism.
+    /// </summary>
     public BallShooter ballShooter;
 
-    // Update is called once per frame.
+    /// <summary>
+    /// Updates the rotation state of the shooter based on user input each frame.
+    /// </summary>
     void Update()
     {
-        // State machine controlling the rotation of the shooter based on user input.
         switch(state)
         {
             case RotateState.Idle:
-                // If the Fire1 button is pressed, transition to the Horizontal rotation state.
                 if(Input.GetButtonDown("Fire1"))
                 {
                     state = RotateState.Horizontal;
                 }
-            break;
+                break;
 
             case RotateState.Horizontal:
-                // While the Fire1 button is held down, rotate horizontally.
                 if(Input.GetButton("Fire1"))
                 {
                     transform.Rotate(new Vector3(0, horizontalRotateSpeed * Time.deltaTime, 0));
                 }
-                // Transition to Vertical rotation state upon release.
                 else if (Input.GetButtonUp("Fire1"))
                 {
                     state = RotateState.Vertical;
                 }
-            break;
+                break;
 
             case RotateState.Vertical:
-                // While the Fire1 button is held down, rotate vertically.
                 if(Input.GetButton("Fire1"))
                 {
                     transform.Rotate(new Vector3(-verticalRotateSpeed * Time.deltaTime, 0, 0));
                 }
-                // Transition to Ready state upon release and enable the BallShooter script.
                 else if(Input.GetButtonUp("Fire1"))
                 {
                     state = RotateState.Ready;
-                    ballShooter.enabled = true; // Allow shooting once the rotation is set.
+                    ballShooter.enabled = true;
                 }
-            break;
+                break;
 
             case RotateState.Ready:
-                // In the Ready state, no rotation occurs. Awaiting shooting command.
-            break;
+                // Ready state does not require specific actions each frame.
+                break;
         }
     }
 
-    // Called when the script becomes active in the game.
+    /// <summary>
+    /// Resets the shooter's rotation and state when the script becomes active.
+    /// </summary>
     private void OnEnable()
     {
-        // Reset rotation and state.
-        transform.rotation = Quaternion.identity; // Reset rotation to no rotation.
-        state = RotateState.Idle; // Set the initial state to Idle.
-        ballShooter.enabled = false; // Disable shooting until properly aimed.
+        transform.rotation = Quaternion.identity;
+        state = RotateState.Idle;
+        ballShooter.enabled = false;
     }
 }
