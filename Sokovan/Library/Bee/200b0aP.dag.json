@@ -6498,6 +6498,9 @@
       "File": "Library/Bee/200b0aP-inputdata.json"
     },
     {
+      "File": "Library/Bee/PlayerScriptAssemblies/Tests.dll"
+    },
+    {
       "File": "Library/PackageCache/com.unity.ext.nunit@1.0.6/net35/unity-custom/nunit.framework.dll"
     },
     {

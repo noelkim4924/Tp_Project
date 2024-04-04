@@ -2,66 +2,48 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// This class is responsible for controlling the player's movement.
 public class Player : MonoBehaviour
 {
-  public GameManager gameManager;
+    // Reference to the GameManager to check the game state.
+    public GameManager gameManager;
 
-   public float speed = 10f;
-   private Rigidbody playerRigidbody; 
-   // Start is called before the first frame update
+    // Movement speed of the player.
+    public float speed = 10f;
+
+    // The Rigidbody component attached to the player for physics-based movement.
+    private Rigidbody playerRigidbody; 
+
+    // Start is called before the first frame update.
     void Start()
     {
+        // Get the Rigidbody component from the current GameObject.
         playerRigidbody = GetComponent<Rigidbody>();
     }
 
-    // Update is called once per frame
+    // Update is called once per frame.
     void Update()
     {
-      if(gameManager.isGameOver == true)
-      {
-        return;
-      }
-  // user input
-    float inputX = Input.GetAxis("Horizontal");
-  // "Horizontal" is a built-in keyword in Unity
-  // it is a string that represents the left and right arrow keys
-  // it is a float that represents the value of the left and right arrow keys
-    // it is a value between -1 and 1(the reason why joisticks work)
-    float inputZ = Input.GetAxis("Vertical");
+        // If the game is over, disable player movement.
+        if(gameManager.isGameOver == true)
+        {
+            return;
+        }
 
-    float fallSpeed = playerRigidbody.velocity.y;
+        // Get user input for horizontal and vertical movement.
+        // "Horizontal" and "Vertical" are built-in Unity inputs configured in the Input Manager.
+        // They represent the arrow keys (or WASD keys) and return a value between -1 and 1.
+        float inputX = Input.GetAxis("Horizontal");
+        float inputZ = Input.GetAxis("Vertical");
 
-   //playerRigidbody.AddForce(inputX * speed, 0, inputZ * speed); (관성 inertia exists )
-   // but velocity is better than force because it ignore inertia x
-   Vector3 velocity = new Vector3(inputX,0,inputZ);
-   
-   velocity = velocity * speed;
+        // Keep the player's current vertical velocity to maintain gravity's effect.
+        float fallSpeed = playerRigidbody.velocity.y;
 
-    velocity.y = fallSpeed;
+        // Create a new velocity vector based on input, speed, and maintaining current fall speed.
+        Vector3 velocity = new Vector3(inputX, 0, inputZ) * speed;
+        velocity.y = fallSpeed; // Apply the original fall speed to the y-axis velocity.
 
-   playerRigidbody.velocity = velocity;
-
-
-
-
-
-//   if(Input.GetKey(KeyCode.W))
-//   {
-//         playerRigidbody.AddForce(0,0,speed);
-//   }
-//   if(Input.GetKey(KeyCode.A))
-//   {
-//         playerRigidbody.AddForce(-speed,0,0);
-//   }
-//   if(Input.GetKey(KeyCode.S))
-//   {
-//         playerRigidbody.AddForce(0,0,-speed);
-//   }
-//   if(Input.GetKey(KeyCode.D))
-//   {
-//         playerRigidbody.AddForce(speed,0,0);
-//   }
-
-
+        // Assign the new velocity to the Rigidbody to move the player.
+        playerRigidbody.velocity = velocity;
     }
 }
